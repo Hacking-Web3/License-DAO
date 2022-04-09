@@ -2,6 +2,27 @@
 
 @border-radius-base: 4px;
 
+body {
+  font-family: "Satoshi", -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
+  color: #493224;
+  background: #FAF2EE;
+}
+
 .highlight {
   background-color: #f9f9f9;
+}
+
+.ant-page-header-heading-title {
+  color: #493224;
+  font-size: 29px;
+
+  &:before {
+    content: "";
+    background: url("/assets/logo-icon.svg") no-repeat;
+    margin-right: 4px;
+    width: 35px;
+    height: 29px;
+    display: inline-block;
+    vertical-align: bottom;
+  }
 }
