@@ -8,7 +8,7 @@ import 'eth-hooks/helpers/__global';
 // (window as any).global = window;
 // const global = window;
 
-if (!global.hasOwnProperty('Buffer')) {
+if (!Object.prototype.hasOwnProperty.call(global, 'Buffer')) {
   (global as any).Buffer = nodeBuffer.Buffer;
 }
 
