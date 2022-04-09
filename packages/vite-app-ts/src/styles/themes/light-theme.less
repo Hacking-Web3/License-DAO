@@ -1,6 +1,7 @@
 @import 'antd/dist/antd.less';
 
 @border-radius-base: 4px;
+@text-color: #493224;
 
 body {
   font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
@@ -44,19 +45,19 @@ body {
 }
 
 .ant-btn-primary {
-  background: #FA6836;
+  background: #fa6836;
   min-width: 335px;
   height: 50px;
   font-weight: 700;
 
   &:hover {
-    background: #C74E25;
-    color: #FFF;
+    background: #c74e25;
+    color: #fff;
   }
 }
 
 .ant-btn-primary.ant-btn-round.ant-btn-lg:hover {
-  color: #FFF;
+  color: #fff;
 }
 
 .menu-item {
@@ -183,4 +184,144 @@ body {
 
 .cover-letter {
   margin-bottom: 40px;
+}
+
+.proposals {
+  margin: auto;
+  width: 70vw;
+}
+
+.proposal-preview {
+  background: white;
+  border-radius: 20px;
+  text-align: left;
+
+  display: grid;
+  column-gap: 60px;
+
+  overflow: hidden;
+  position: relative;
+}
+
+.proposal-preview-details {
+  padding: 23px 28px;
+  grid-column-start: 1;
+  grid-column-end: 6;
+}
+
+.proposal-preview-quorum {
+  .ant-progress-inner {
+    border: 1px solid #d7c9c3;
+  }
+}
+
+.proposal-preview-stats {
+  padding: 23px 28px;
+  grid-column-start: 6;
+  grid-column-end: 11;
+  padding-right: 155px;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  background: rgba(253, 251, 250, 0.99);
+
+  > div:not(:last-child) {
+    margin-right: 30px;
+  }
+
+  > div(:last-child) {
+    text-align: right;
+  }
+
+  .ant-progress-inner {
+    overflow: visible;
+  }
+
+  .ant-progress-success-bg {
+    border-right: 1px solid @text-color;
+    border-top-right-radius: 0px 0px !important;
+    border-bottom-right-radius: 0px 0px !important;
+    height: 20px !important;
+    top: -3px;
+  }
+}
+
+.proposal-preview-status {
+  position: absolute;
+  top: 13px;
+  right: 11px;
+  span {
+    background: #c6e6e3;
+    border-radius: 50px;
+
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+
+    color: #30827c;
+    padding: 4px 9px;
+  }
+}
+
+.proposal-preview-title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 23px;
+  line-height: 31px;
+  a {
+    color: @text-color;
+  }
+}
+
+.proposal-preview-info {
+  display: grid;
+}
+
+.proposal-preview-author {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+
+  display: inline-block;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.proposal-preview-og-link {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+
+  display: inline-block;
+  text-align: right;
+
+  grid-column-start: 2;
+
+  a {
+    vertical-align: top;
+    color: #bfa9a0;
+
+    &:after {
+      content: url('/assets/ext-arrow.svg');
+      vertical-align: bottom;
+    }
+  }
+}
+
+.proposal-preview-stats-title {
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.proposal-preview-vote-res {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  :nth-child(2) {
+    text-align: right;
+  }
 }
