@@ -3,136 +3,132 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract licensedao {
-    uint DAOmembers;
+contract LicenseDAO {
+  // Map Proposal ID to Proposal
+  mapping(address => bool) public members;
+  mapping(address => bool) public licenses;
 
-    constructor() {
-        owner = msg.sender; // setting the owner the contract deployer
-        DAOmembers = 0;
-        members[owner] = true;
+  mapping(address => uint256) public coverLetters;
+
+  // address is license contract or member
+  mapping(address => Proposal) proposals;
+
+  uint256 public totalMembers;
+  uint256 public quorum;
+  uint256 public support;
+  uint256 public numProposals;
+  uint256 public proposalDuration = 7 days;
+
+  enum voteType {
+    NONE,
+    FOR,
+    AGAINST
+  }
+
+  enum ProposalType {
+    MEMBER,
+    LICENSE
+  }
+
+  struct Proposal {
+    uint256 deadline;
+    uint256 votesFor;
+    uint256 votesAgainst;
+    ProposalType proposalType;
+    mapping(address => voteType) votes;
+  }
+
+  event NewUserProposed(address userAddress, string ipfsHash);
+  event NewLicenseProposed(address licenseAddress, string streamId);
+  event UserJoined(address userAddress);
+  event UserRejected(address userAddress);
+  event LicenseApproved(address licenseAddress);
+  event LicenseRejected(address licenseAddress);
+
+  modifier memberOnly() {
+    require(members[msg.sender] == true, "You need to be a member");
+    _;
+  }
+
+  constructor(uint256 _quorum, uint256 _support) {
+    totalMembers = 0;
+    members[msg.sender] = true;
+    quorum = _quorum; // 3000 for 30%
+    support = _support; // 5000 for 50%
+  }
+
+  function newProposal(
+    address _proposed,
+    ProposalType _proposalType,
+    string _document
+  ) external memberOnly {
+    Proposal storage proposal = proposals[_proposed];
+
+    if (_proposalType == ProposalType.MEMBER) {
+      require(proposal.deadline != 0 || members[_proposed] == false, "User is in the dao or already proposed");
+      emit NewUserProposed(_proposed, _document);
+    } else if (_proposalType == ProposalType.LICENSE) {
+      require(proposal.deadline != 0 || licenses[_proposed] == false, "License is approved or already proposed");
+      emit NewLicenseProposed(_proposed, _document);
     }
 
-    enum proposalStatus {
-        NONE,
-        ACCEPTED,
-        REJECTED
+    proposals.proposed = _proposed;
+    proposals.deadline = now + proposalDuration;
+    proposals.proposalType = _proposalType;
+  }
+
+  /// Vote yes/no on a given proposal
+  function voteOnProposal(address _proposed, voteType _vote) external memberOnly {
+    Proposal storage proposal = proposals[_proposalId];
+    voteType prevUserVote = proposal.votes[_proposed][msg.sender];
+    require(_vote != voteType.NONE, "You cannot take back your vote");
+    require(_vote != prevUserVote, "You cannot cast same vote");
+    require(proposal.deadline > block.timestamp, "Inactive or not existing proposal");
+
+    if (_vote == voteType.AGAINST) {
+      proposal.voteAgainst += 1;
+    } else {
+      proposal.voteFor += 1;
     }
 
-    enum voteType { 
-        NONE,
-        FOR,
-        AGAINST
+    if (proposal.votes[_proposed][msg.sender] != voteType.NONE) {
+      if (_vote == voteType.AGAINST) {
+        proposal.voteAgainst -= 1;
+      } else {
+        proposal.voteFor -= 1;
+      }
+    }
+  }
+
+  /// Execute a proposal
+  function executeProposal(address _proposed) external {
+    Proposal storage proposal = proposals[_proposed];
+
+    require(
+      (block.timestamp <= proposal.deadline &&
+        (proposal.votesFor + proposal.voteAgainst) > quorum &&
+        (proposal.voteFor * 10000) / (proposal.votesFor + proposal.votesAgainst) > support) || block.timestamp > proposal.deadline,
+      "You cannot execute active proposal"
+    );
+
+    if (proposal.proposalType == ProposalType.MEMBER) {
+      addUser(_proposed);
+    } else {
+      addLicense(_proposed);
     }
 
-    enum ProposalType {
-        MEMBER,
-        LICENSE
-    }
+    delete proposal;
+  }
 
-    struct Proposal {
-        address proposed;
-        uint256 deadline;
-        uint256 votesFor;
-        uint256 votesAgainst;
-        ProposalType proposalType;
-        bool executed;
-        proposalStatus status;
-        mapping(address => bool) voters;
-        mapping(address => voteType) _voteType;
-    }
-    
-    // Map Proposal ID to Proposal
-    mapping(uint256 => Proposal) public proposals;
-    mapping(address => bool) public members;
-    mapping(address => uint) public coverLetters;
+  function addUser(address userAddress) internal {
+    members[userAddress] = true;
+    totalMembers += 1;
+    emit UserJoined(userAddress);
+  }
 
-    event NewUserProposed(address userProposed);
-    event NewLicenseProposed(address licenseProposed);
-    event UserJoined(address newUserAddress);
-    event UserRejected(address rejectedUserAddress);
-    event NewLicenseValidated(address newLicenseAddress);
-    event LicenseRejected(address rejectedLicenseAddress);
-
-    uint chorum = DAOmembers * 10000 / 3000;
-
-    uint256 public numProposals;
-
-    modifier memberOnly() {
-        require(members[msg.sender] == 0, "You need to be a member");
-        _;
-    }
-
-    function newProposal(address _proposed, ProposalType _proposalType) external memberOnly returns (uint256){
-        Proposal storage proposal = proposals[numProposals];
-        if (_proposalType == ProposalType.MEMBER) {
-            require(members[_proposed] == 0, "USER IS ALREADY IN THE DAO");
-            proposals[proposalType] = MEMBER;
-            emit NewUserProposed(_proposed);
-        } else if (_proposalType == ProposalType.LICENSE) {
-            proposals[proposalType] = LICENSE;
-            emit NewLicenseProposed(_proposed);
-        }
-        proposals[proposed] = _proposed;
-        proposals[deadline] = now + 7 days;
-        ///this block updates proposal number of the contract and returns current proposal to front
-        numProposals++;
-        return numProposals - 1;
-    }
-
-    /// Vote yes/no on a given proposal
-    function voteOnProposal(uint256 _proposalId, voteType _vote) external memberOnly {
-        Proposal storage proposal = proposals[_proposalId];
-        require(proposal.deadline > block.timestamp, "INACTIVE_PROPOSAL");
-        if (proposal.voters[msg.sender] == false) {
-            if (proposal[msg.sender].voteType == FOR && _vote == voteType.AGAINST) {
-                proposal.voteFor -= 1;
-                proposal.voteAgainst += 1;
-            } else if (proposal[msg.sender].voteType == AGAINST && _vote == voteType.FOR) {
-                proposal.voteFor += 1;
-                proposal.voteAgainst -= 1;
-            }            
-        } else {
-            proposal.voters[msg.sender] = true;
-
-            if (_vote == VoteType.voteFor) {
-                proposal.voteFor += 1;
-            } else {
-                proposal.voteAgainst += 1;
-            }
-        }
-    }
-
-    /// Execute a proposal
-    function executeProposal(uint256 _proposalId) external memberOnly {
-        Proposal storage proposal = proposals[_proposalId];
-        
-        if (proposal.deadline <= block.timestamp && (proposal.votesFor + proposal.voteAgainst) < chorum) {
-            proposal.status = REJECTED;
-            revert();
-        }
-
-        require(proposal.deadline <= block.timestamp, "ACTIVE_PROPOSAL");
-        require(proposal.executed == false, "ALREADY_EXECUTED");
-        require((proposal.votesFor + proposal.voteAgainst) >= chorum);
-        proposal.executed = true;
-
-        if (proposal.voteFor > ((proposal.votesFor + proposal.votesAgainst)/2)) {
-            if (proposal.proposalType == ProposalType.MEMBER) {
-                addUser(proposal.address);
-            } else {
-                addLicense(proposal.address);
-            }
-            proposal.status = ACCEPTED;
-        }
-    }
-
-    function addUser(address newUserAddress) internal {
-        members[_addressToMemberlist] = true;
-        DAOmembers += 1;
-        emit UserJoined(newUserAddress);
-    }
-
-    function addLicense(address newLicense) internal {
-        ///we need to decide what to do
-    }
+  function addLicense(address licenseAddress) internal {
+    licenses[licenseAddress] = true;
+    emit LicenseApproved(licenseAddress);
+    ///we need to decide what to do
+  }
 }
