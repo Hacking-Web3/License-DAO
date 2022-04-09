@@ -21,13 +21,13 @@ const validateMessages = {
 };
 /* eslint-enable no-template-curly-in-string */
 
-function getBase64(img: Blob, callback: (arg0: string | ArrayBuffer | null) => any) {
+function getBase64(img: any, callback: any): void {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
 }
 
-function beforeUpload(file: { type: string; size: number; }) {
+function beforeUpload(file: { type: string; size: number; }): boolean | number {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
         message.error('You can only upload JPG/PNG file!');
