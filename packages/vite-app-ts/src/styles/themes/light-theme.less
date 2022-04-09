@@ -35,12 +35,28 @@ body {
 
 .ant-btn-round.ant-btn-lg {
   border-radius: 30px;
-  background: #f2e1d8;
+  /* background: #f2e1d8; */
 
   &:hover {
-    background: #e3d3cb;
+    /* background: #e3d3cb; */
     color: inherit;
   }
+}
+
+.ant-btn-primary {
+  background: #FA6836;
+  min-width: 335px;
+  height: 50px;
+  font-weight: 700;
+
+  &:hover {
+    background: #C74E25;
+    color: #FFF;
+  }
+}
+
+.ant-btn-primary.ant-btn-round.ant-btn-lg:hover {
+  color: #FFF;
 }
 
 .menu-item {
@@ -124,4 +140,47 @@ body {
       content: url('/assets/approved.svg');
     }
   }
+}
+
+.submit-page-header {
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 29px;
+
+  margin-bottom: 40px;
+}
+
+.join-header {
+  font-weight: 700;
+  font-size: 23px;
+  line-height: 29px;
+
+  text-align: center;
+
+  color: #fa6836;
+
+  margin-bottom: 20px;
+}
+
+.join-form {
+  margin: auto;
+  width: 70vw;
+
+  ol {
+    text-align: left;
+    list-style: decimal;
+    padding-left: 20px;
+  }
+}
+
+.ant-input {
+  border: 1px solid #d7c9c3;
+
+  &:hover {
+    border-color: #d7c9c3;
+  }
+}
+
+.cover-letter {
+  margin-bottom: 40px;
 }
