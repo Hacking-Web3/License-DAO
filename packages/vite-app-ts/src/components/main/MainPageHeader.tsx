@@ -46,17 +46,19 @@ export const MainPageHeader: FC<IMainPageHeaderProps> = (props) => {
    */
   const right = (
     <div style={{ position: 'fixed', textAlign: 'right', right: 0, top: 0, padding: 10, zIndex: 1 }}>
-      <div>
+      <div style={{ display: 'inline-block', verticalAlign: 'middle', lineHeight: '44px', marginRight: '48px' }}>
         <MenuItem to="/licenses">Licenses</MenuItem>
         <MenuItem to="/members">Members</MenuItem>
       </div>
-      <Account
-        createLoginConnector={props.scaffoldAppProviders.createLoginConnector}
-        ensProvider={props.scaffoldAppProviders.mainnetAdaptor?.provider}
-        price={props.price}
-        blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
-        hasContextConnect={true}
-      />
+      <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+        <Account
+          createLoginConnector={props.scaffoldAppProviders.createLoginConnector}
+          ensProvider={props.scaffoldAppProviders.mainnetAdaptor?.provider}
+          price={props.price}
+          blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
+          hasContextConnect={true}
+        />
+      </div>
       <FaucetHintButton scaffoldAppProviders={props.scaffoldAppProviders} gasPrice={gasPrice} />
       {props.children}
     </div>
