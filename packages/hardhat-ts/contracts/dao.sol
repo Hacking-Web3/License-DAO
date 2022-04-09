@@ -80,7 +80,7 @@ contract licensedao {
     }
 
     /// Vote yes/no on a given proposal
-    function voteOnProposal(uint256 _proposalId, VoteType _vote) external memberOnly {
+    function voteOnProposal(uint256 _proposalId, voteType _vote) external memberOnly {
         Proposal storage proposal = proposals[_proposalId];
         require(proposal.deadline > block.timestamp, "INACTIVE_PROPOSAL");
         if (proposal.voters[msg.sender] == false) {
