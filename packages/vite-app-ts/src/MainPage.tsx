@@ -11,6 +11,7 @@ import { asEthersAdaptor } from 'eth-hooks/functions';
 
 import { MainPageMenu, MainPageContracts, MainPageFooter, MainPageHeader } from './components/main';
 import { useScaffoldHooksExamples as useScaffoldHooksExamples } from './components/main/hooks/useScaffoldHooksExamples';
+import Intro from './components/main/Intro';
 
 import { useBurnerFallback } from '~~/components/main/hooks/useBurnerFallback';
 import { useScaffoldProviders as useScaffoldAppProviders } from '~~/components/main/hooks/useScaffoldAppProviders';
@@ -107,6 +108,7 @@ export const Main: FC = () => {
         <MainPageMenu route={route} setRoute={setRoute} />
         <Switch>
           <Route exact path="/">
+            <Intro />
             <MainPageContracts scaffoldAppProviders={scaffoldAppProviders} />
           </Route>
           {/* you can add routes here like the below examlples */}
