@@ -13,6 +13,7 @@ import SectionHeader from './components/common/SectionHeader';
 import { MainPageMenu, MainPageContracts, MainPageFooter, MainPageHeader } from './components/main';
 import { useScaffoldHooksExamples as useScaffoldHooksExamples } from './components/main/hooks/useScaffoldHooksExamples';
 import Intro from './components/main/Intro';
+import JoinForm from './components/pages/join/JoinForm';
 import { APPROVED, PENDING } from './constants';
 
 import { useBurnerFallback } from '~~/components/main/hooks/useBurnerFallback';
@@ -113,6 +114,10 @@ export const Main: FC = () => {
             <Intro />
             <SectionHeader type={APPROVED}>Approved licenses</SectionHeader>
             <SectionHeader type={PENDING}>Pending approval</SectionHeader>
+            <MainPageContracts scaffoldAppProviders={scaffoldAppProviders} />
+          </Route>
+          <Route path="/join">
+            <JoinForm />
             <MainPageContracts scaffoldAppProviders={scaffoldAppProviders} />
           </Route>
           {/* you can add routes here like the below examlples */}
