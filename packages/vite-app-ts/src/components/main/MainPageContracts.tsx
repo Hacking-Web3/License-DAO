@@ -8,6 +8,8 @@ import { IScaffoldAppProviders } from '~~/components/main/hooks/useScaffoldAppPr
 import { useAppContracts } from '~~/config/contractContext';
 import { NETWORKS } from '~~/models/constants/networks';
 
+import { UserForm } from './UserProfilForm';
+
 export interface IMainPageContractsProps {
   scaffoldAppProviders: IScaffoldAppProviders;
 }
@@ -25,6 +27,9 @@ export const MainPageContracts: FC<IMainPageContractsProps> = (props) => {
   const yourContract = useAppContracts('YourContract', ethersContext.chainId);
 
   if (ethersContext.account == null) {
+    /* return (
+      <UserForm></UserForm>
+    ); */
     return (
       <ProposalPreview
         licenseTitle="LicenseTitle"
@@ -36,28 +41,28 @@ export const MainPageContracts: FC<IMainPageContractsProps> = (props) => {
         minTurnOver={33}
         support={70}
         minSupport={2}
-        status="validate"></ProposalPreview>
+        status="validate"></ProposalPreview> 
     );
   }
 
-  return (
+return (
+  <>
     <>
-      <>
-        {/* **********
+      {/* **********
           ❓ this scaffolding is full of commonly used components
           this <Contract/> component will automatically parse your ABI
           and give you a form to interact with it locally
         ********** */}
-        <GenericContract
-          contractName="YourContract"
-          contract={yourContract}
-          mainnetAdaptor={props.scaffoldAppProviders.mainnetAdaptor}
-          blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
-        />
-        {/* **********
+      <GenericContract
+        contractName="YourContract"
+        contract={yourContract}
+        mainnetAdaptor={props.scaffoldAppProviders.mainnetAdaptor}
+        blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
+      />
+      {/* **********
          * ❓ uncomment for a second contract:
          ********** */}
-        {/*
+      {/*
           <GenericContract
             contractName="SecondContract"
             contract={contract={contractList?.['SecondContract']}
@@ -66,7 +71,7 @@ export const MainPageContracts: FC<IMainPageContractsProps> = (props) => {
             contractConfig={props.contractConfig}
           />
         */}
-      </>
     </>
-  );
+  </>
+);
 };

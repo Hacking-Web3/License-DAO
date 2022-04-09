@@ -54,3 +54,8 @@ code {
 button {
   font-size: calc(10px + 2vmin);
 }
+
+.avatar-uploader > .ant-upload {
+  width: 128px;
+  height: 128px;
+}
