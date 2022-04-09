@@ -101,10 +101,9 @@ export const Main: FC = () => {
 
   return (
     <div className="App">
-      <MainPageHeader scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
-
       {/* Routes should be added between the <Switch> </Switch> as seen below */}
       <BrowserRouter>
+        <MainPageHeader scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
         <MainPageMenu route={route} setRoute={setRoute} />
         <Switch>
           <Route exact path="/">
