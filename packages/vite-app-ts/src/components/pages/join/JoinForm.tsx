@@ -1,12 +1,15 @@
 import { Form, Button } from 'antd';
 import { FC } from 'react';
 
+import storeFiles from '../../../../scripts/store.mjs'
+
 import CoverLetterForm from './CoverLetterForm';
 
 import SubmitPageHeader from '~~/components/common/SubmitPageHeader';
 
 const JoinForm: FC<any> = () => {
   const submit = (values: any): void => {
+    storeFiles(CoverLetterForm)
     // TODO: upload `values["cover-letter"] to web3.storage
   };
   return (
