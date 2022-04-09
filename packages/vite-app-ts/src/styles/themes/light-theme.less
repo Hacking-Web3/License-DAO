@@ -98,3 +98,30 @@ body {
 .intro-image {
   grid-column-start: 2;
 }
+
+.section-title {
+  font-weight: 900;
+  font-size: 23px;
+  line-height: 89px;
+  text-align: left;
+
+  margin: auto;
+  width: 70vw;
+
+  &:after {
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+
+  &.pending {
+    &:after {
+      content: url('/assets/pending.svg');
+    }
+  }
+
+  &.approved {
+    &:after {
+      content: url('/assets/approved.svg');
+    }
+  }
+}
