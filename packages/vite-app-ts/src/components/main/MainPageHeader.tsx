@@ -5,6 +5,8 @@ import { useGasPrice } from 'eth-hooks';
 import { useEthersContext } from 'eth-hooks/context';
 import React, { FC, ReactElement } from 'react';
 
+import { MenuItem } from './MenuItem';
+
 import { FaucetHintButton } from '~~/components/common/FaucetHintButton';
 import { IScaffoldAppProviders } from '~~/components/main/hooks/useScaffoldAppProviders';
 import { getNetworkInfo } from '~~/functions';
@@ -44,6 +46,10 @@ export const MainPageHeader: FC<IMainPageHeaderProps> = (props) => {
    */
   const right = (
     <div style={{ position: 'fixed', textAlign: 'right', right: 0, top: 0, padding: 10, zIndex: 1 }}>
+      <div>
+        <MenuItem to="/licenses">Licenses</MenuItem>
+        <MenuItem to="/members">Members</MenuItem>
+      </div>
       <Account
         createLoginConnector={props.scaffoldAppProviders.createLoginConnector}
         ensProvider={props.scaffoldAppProviders.mainnetAdaptor?.provider}
