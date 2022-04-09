@@ -13,6 +13,7 @@ import SectionHeader from './components/common/SectionHeader';
 import { MainPageMenu, MainPageContracts, MainPageFooter, MainPageHeader } from './components/main';
 import { useScaffoldHooksExamples as useScaffoldHooksExamples } from './components/main/hooks/useScaffoldHooksExamples';
 import Intro from './components/main/Intro';
+import { ProposalPreview } from './components/main/ProposalPreview';
 import JoinForm from './components/pages/join/JoinForm';
 import { APPROVED, PENDING } from './constants';
 
@@ -113,6 +114,19 @@ export const Main: FC = () => {
           <Route exact path="/">
             <Intro />
             <SectionHeader type={APPROVED}>Approved licenses</SectionHeader>
+            <div className="proposals">
+              <ProposalPreview
+                licenseTitle="Creative Commons 0 License"
+                licenseVersion="1.0"
+                licenseLocality="Universal"
+                author="Anja Blaj"
+                streamId="streamId"
+                quorum={66}
+                minQuorum={33}
+                support={70}
+                minSupport={50}
+                status="Approved"></ProposalPreview>
+            </div>
             <SectionHeader type={PENDING}>Pending approval</SectionHeader>
             <MainPageContracts scaffoldAppProviders={scaffoldAppProviders} />
           </Route>
