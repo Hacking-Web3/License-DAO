@@ -42,7 +42,7 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 // Select the network you want to deploy to here:
 //
 
-const mnemonicPath = './generated/mnemonic.secret';
+const mnemonicPath = './mnemonic.secret';
 const getMnemonic = (): string => {
   try {
     return fs.readFileSync(mnemonicPath).toString().trim();
@@ -102,7 +102,7 @@ const config: HardhatUserConfig = {
       },
     },
     goerli: {
-      url: 'https://goerli.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad', // <---- YOUR INFURA ID! (or it won't work)
+      url: 'https://goerli.infura.io/v3/14ed832c9e274267be3d8ed2b9f60e48', // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: getMnemonic(),
       },
