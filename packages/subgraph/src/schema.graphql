@@ -15,3 +15,11 @@ type User @entity {
   createdAt: BigInt!
   memberProposal: MemberProposal!
 }
+
+type Voting @entity {
+  id: ID!
+  address: Bytes!
+  proposalAddress: Bytes!
+  createdAt: BigInt!
+  vote: Integer!
+}
