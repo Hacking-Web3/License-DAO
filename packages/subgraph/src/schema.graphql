@@ -4,4 +4,11 @@ type MemberProposal @entity {
   ipfsHash: String!
   createdAt: BigInt!
   transactionHash: String!
+  status: String!
+}
+
+type JoinedUser @entity {
+  id: ID!
+  address: Bytes!
+  createdAt: BigInt!
 }

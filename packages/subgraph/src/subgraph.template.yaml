@@ -22,4 +22,6 @@ dataSources:
       eventHandlers:
         - event: NewUserProposed(address,string)
           handler: handleNewUserProposed
+        - event: UserJoined(address)
+          handler: handleUserJoined
       file: ./src/mapping.ts
