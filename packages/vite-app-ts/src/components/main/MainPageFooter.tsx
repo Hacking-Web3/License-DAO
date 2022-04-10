@@ -1,109 +1,26 @@
-import { Row, Col, Button } from 'antd';
-import { Faucet, GasGauge } from 'eth-components/ant';
-import { useEthersContext } from 'eth-hooks/context';
-import React, { FC } from 'react';
+import React from 'react'
+import { ChakraProvider, Link, Text, Divider } from '@chakra-ui/react'
 
-import { Ramp, ThemeSwitcher } from '~~/components/common';
-import { getFaucetAvailable } from '~~/components/common/FaucetHintButton';
-import { IScaffoldAppProviders } from '~~/components/main/hooks/useScaffoldAppProviders';
-import { getNetworkInfo } from '~~/functions/getNetworkInfo';
-import { NETWORKS } from '~~/models/constants/networks';
-
-export interface IMainPageFooterProps {
-  scaffoldAppProviders: IScaffoldAppProviders;
-  price: number;
-}
-
-/**
- * 🗺 Footer: Extra UI like gas price, eth price, faucet, and support:
- * @param props
- * @returns
- */
-export const MainPageFooter: FC<IMainPageFooterProps> = (props) => {
-  const ethersContext = useEthersContext();
-
-  // Faucet Tx can be used to send funds from the faucet
-  const faucetAvailable = getFaucetAvailable(props.scaffoldAppProviders, ethersContext);
-
-  const left = (
-    <div
-      style={{
-        position: 'fixed',
-        textAlign: 'left',
-        left: 0,
-        bottom: 20,
-        padding: 10,
-      }}>
-      <Row align="middle" gutter={[4, 4]}>
-        <Col span={8}>
-          <Ramp price={props.price} address={ethersContext?.account ?? ''} networks={NETWORKS} />
-        </Col>
-
-        <Col
-          span={8}
-          style={{
-            textAlign: 'center',
-            opacity: 0.8,
-          }}>
-          <GasGauge
-            chainId={props.scaffoldAppProviders.targetNetwork.chainId}
-            currentNetwork={getNetworkInfo(ethersContext.chainId)}
-            provider={ethersContext.provider}
-            speed="average"
-          />
-        </Col>
-        <Col
-          span={8}
-          style={{
-            textAlign: 'center',
-            opacity: 1,
-          }}>
-          <Button
-            onClick={(): void => {
-              window.open('https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA');
-            }}
-            size="large"
-            shape="round">
-            <span
-              style={{
-                marginRight: 8,
-              }}
-              role="img"
-              aria-label="support">
-              💬
-            </span>
-            Support
-          </Button>
-        </Col>
-      </Row>
-
-      <Row align="middle" gutter={[4, 4]}>
-        <Col span={24}>
-          {
-            /*  if the local provider has a signer, let's show the faucet:  */
-            faucetAvailable &&
-            props.scaffoldAppProviders?.mainnetAdaptor &&
-            props.scaffoldAppProviders?.localAdaptor ? (
-              <Faucet
-                localAdaptor={props.scaffoldAppProviders.localAdaptor}
-                price={props.price}
-                mainnetAdaptor={props.scaffoldAppProviders.mainnetAdaptor}
-              />
-            ) : (
-              <></>
-            )
-          }
-        </Col>
-      </Row>
-    </div>
-  );
-
-  const right = <ThemeSwitcher />;
-
-  return (
-    <>
-      {left}
-      {right}
-    </>
-  );
-};
+const MainPageFooter = () => (
+  <ChakraProvider resetCSS>
+    <Link href="https://github.com/Hacking-Web3/Licenses-DAO" isExternal mb={5}>
+      Github link
+    </Link>
+    <Divider
+      borderColor="blackAlpha.500"
+      pt={5}
+      fontWeight="bold"
+      color="#bfa9a0"
+    />
+    <Text pt={5} opacity={1} color="#bfa9a0" fontSize="sm">
+      LICENSES DAO IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES.
+      DISTRIBUTION OF ANY DOCUMENTS AND PROPOSALS FROM THIS PAGE DOES NOT CREATE
+      AN ATTORNEY-CLIENT RELATIONSHIP. LICENSES DAO PROVIDES THIS INFORMATION ON
+      AN "AS-IS" BASIS AND MAKES NO WARRANTIES REGARDING THE USE OF THE
+      DOCUMENTS AND PROPOSALS FOUND ON THIS PAGE OR THE INFORMATION OR WORKS
+      PROVIDED HEREUNDER, AND DISCLAIMS LIABILITY FOR DAMAGES RESULTING FROM THE
+      USE OF ANY SUCH CONTENT PROVIDED HEREUNDER.
+    </Text>
+  </ChakraProvider>
+)
+export default MainPageFooter
