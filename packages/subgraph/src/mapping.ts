@@ -5,11 +5,7 @@ import {
   UserJoined,
   VoteSent
 } from "../generated/LicenseDAO/LicenseDAO";
-<<<<<<< HEAD
 import { MemberProposal, User, Voting } from "../generated/schema";
-=======
-import { MemberProposal, JoinedUser, Voting } from "../generated/schema";
->>>>>>> 86f2f46846aab8cfe82f3af8d5a064efabf08d65
 
 export function handleNewUserProposed(event: NewUserProposed): void {
   let userAddress = event.params.userAddress.toHexString();
