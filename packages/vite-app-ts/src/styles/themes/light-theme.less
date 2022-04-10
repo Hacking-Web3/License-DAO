@@ -97,6 +97,7 @@ body {
   padding-bottom: 10px;
   display: grid;
   column-gap: 85px;
+  grid-template-columns: repeat(3, 1fr);
 
   margin: auto;
   width: 70vw;
@@ -107,13 +108,13 @@ body {
   font-size: 53px;
   line-height: 64px;
   grid-column-start: 1;
-  grid-column-end: 2;
+  grid-column-end: 3;
 
   text-align: left;
 }
 
 .intro-image {
-  grid-column-start: 2;
+  grid-column-start: 3;
 }
 
 .section-title {
@@ -201,6 +202,12 @@ body {
 
   overflow: hidden;
   position: relative;
+
+  .proposal-status {
+    position: absolute;
+    top: 13px;
+    right: 11px;
+  }
 }
 
 .proposal-preview-details {
@@ -247,12 +254,9 @@ body {
   }
 }
 
-.proposal-preview-status {
-  position: absolute;
-  top: 13px;
-  right: 11px;
+.proposal-status {
   span {
-    background: #c6e6e3;
+    background: #e6cff0;
     border-radius: 50px;
 
     font-weight: 700;
@@ -260,8 +264,15 @@ body {
     line-height: 16px;
     text-align: center;
 
-    color: #30827c;
+    color: #786282;
     padding: 4px 9px;
+  }
+
+  &.approved {
+    span {
+      background: #c6e6e3;
+      color: #30827c;
+    }
   }
 }
 
@@ -323,5 +334,47 @@ body {
 
   :nth-child(2) {
     text-align: right;
+  }
+}
+
+.submission-header {
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 54px;
+}
+
+.submission-dates {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  text-transform: uppercase;
+}
+
+.submission-content {
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 40px;
+
+  font-size: 15px;
+
+  margin: auto;
+  width: 70vw;
+}
+
+.submission-stats {
+  display: grid;
+  margin: auto;
+  width: 70vw;
+
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 45px;
+  align-items: center;
+
+  .ant-progress-success-bg {
+    border-right: 1px solid @text-color;
+    border-top-right-radius: 0px 0px !important;
+    border-bottom-right-radius: 0px 0px !important;
+    height: 20px !important;
+    top: -3px;
   }
 }

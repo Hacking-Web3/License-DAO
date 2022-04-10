@@ -1,3 +1,4 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 /* eslint-disable */
 //import './helpers/__global';
 
@@ -22,12 +23,21 @@ const run = async (): Promise<void> => {
 
   const App = lazy(() => import('./App'));
 
+  const subgraphUri = 'http://localhost:8000/subgraphs/name/scaffold-eth/your-contract';
+
+  const client = new ApolloClient({
+    uri: subgraphUri,
+    cache: new InMemoryCache(),
+  });
+
   ReactDOM.render(
-    <StrictMode>
-      <Suspense fallback={<div />}>
-        <App />
-      </Suspense>
-    </StrictMode>,
+    <ApolloProvider client={client}>
+      <StrictMode>
+        <Suspense fallback={<div />}>
+          <App />
+        </Suspense>
+      </StrictMode>
+    </ApolloProvider>,
     document.getElementById('root')
   );
 };

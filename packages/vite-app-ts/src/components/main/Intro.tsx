@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 const Intro: FC<any> = () => (
   <div className="intro">
-    <div className="intro-text">Some very welcome text 3 lines welcome text and something about?</div>
+    <div className="intro-text">Welcome to the Web3 licenses permanently stored on the IPFS!</div>
     <div className="intro-image">
       <img src="/assets/intro-image.svg" alt="" />
     </div>

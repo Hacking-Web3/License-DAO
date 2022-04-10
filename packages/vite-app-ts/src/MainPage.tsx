@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import '~~/styles/main-page.css';
 
-import { useBalance, useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
+import { useBalance, useContractReader, useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
 import { useEthersContext } from 'eth-hooks/context';
 import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
@@ -23,6 +23,8 @@ import { Hints } from '~~/components/pages';
 import { BURNER_FALLBACK_ENABLED, MAINNET_PROVIDER, SUBGRAPH_URI } from '~~/config/appConfig';
 import { useAppContracts, useConnectAppContracts, useLoadAppContracts } from '~~/config/contractContext';
 import { NETWORKS } from '~~/models/constants/networks';
+import Members from './components/pages/members/Members';
+import Submission from './components/pages/submission/Submission';
 
 /**
  * ⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️
@@ -76,16 +78,12 @@ export const Main: FC = () => {
   // -----------------------------
 
   // init contracts
-  // const licenseDAO = useAppContracts('LicenseDAO', ethersContext.chainId);
+  const licenseDAO = useAppContracts('LicenseDAO', ethersContext.chainId);
   const mainnetDai = useAppContracts('DAI', NETWORKS.mainnet.chainId);
 
   // keep track of a variable from the contract in the local React state:
-  // const [purpose, update] = useContractReader(
-  // yourContract,
-  // yourContract?.purpose,
-  // [],
-  // yourContract?.filters.SetPurpose()
-  // );
+  const [quorum, updateQuorum] = useContractReader(licenseDAO, licenseDAO?.quorum, []);
+  const [support, updateSupport] = useContractReader(licenseDAO, licenseDAO?.support, []);
 
   // 📟 Listen for broadcast events
   // const [setPurposeEvents] = useEventListener(licenseDAO, 'SetPurpose', 0);
@@ -109,7 +107,6 @@ export const Main: FC = () => {
       {/* Routes should be added between the <Switch> </Switch> as seen below */}
       <BrowserRouter>
         <MainPageHeader scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
-        <MainPageMenu route={route} setRoute={setRoute} />
         <Switch>
           <Route exact path="/">
             <Intro />
@@ -122,18 +119,25 @@ export const Main: FC = () => {
                 author="Anja Blaj"
                 streamId="streamId"
                 quorum={66}
-                minQuorum={33}
+                minQuorum={quorum?.div(100).toNumber() || 0}
                 support={70}
-                minSupport={50}
+                minSupport={support?.div(100).toNumber() || 0}
                 proposalAddress={'some address'}
-                status="Approved"></ProposalPreview>
+                type="license"
+                status="approved"></ProposalPreview>
             </div>
-            <SectionHeader type={PENDING}>Pending approval</SectionHeader>
+            {/*
             <MainPageContracts scaffoldAppProviders={scaffoldAppProviders} />
+              */}
           </Route>
           <Route path="/join">
             <JoinForm />
-            <MainPageContracts scaffoldAppProviders={scaffoldAppProviders} />
+          </Route>
+          <Route path="/members">
+            <Members />
+          </Route>
+          <Route path="/proposals/u/:address">
+            <Submission minQuorum={quorum?.div(100).toNumber() || 0} minSupport={support?.div(100).toNumber() || 0} />
           </Route>
           {/* you can add routes here like the below examlples */}
           <Route path="/hints">

@@ -4,14 +4,12 @@ import { EthComponentsSettingsContext } from 'eth-components/models';
 import { useGasPrice } from 'eth-hooks';
 import { useEthersContext } from 'eth-hooks/context';
 import { FC, useContext } from 'react';
-import { Web3Storage } from 'web3.storage';
-import { CIDString } from 'web3.storage/dist/src/lib/interface';
 
 import CoverLetterForm from './CoverLetterForm';
 
 import SubmitPageHeader from '~~/components/common/SubmitPageHeader';
-import { WEB3_STORAGE_TOKEN } from '~~/config/appConfig';
 import { useAppContracts } from '~~/config/contractContext';
+import { storeFiles } from '~~/functions/web3Storage';
 
 const makeFileObjects = (content: string): File[] => {
   const blob = new Blob([content], { type: 'text/plain' });
@@ -19,21 +17,6 @@ const makeFileObjects = (content: string): File[] => {
   const files = [new File([blob], 'cover-letter.txt')];
   return files;
 };
-
-const makeStorageClient = (): Web3Storage | void => {
-  if (WEB3_STORAGE_TOKEN) {
-    return new Web3Storage({
-      token: WEB3_STORAGE_TOKEN,
-    });
-  }
-};
-
-async function storeFiles(files: File[]): Promise<CIDString | undefined> {
-  const client = makeStorageClient();
-  const cid = await client?.put(files);
-  console.log('stored files with cid:', cid);
-  return cid;
-}
 
 interface Values {
   'cover-letter': string;
