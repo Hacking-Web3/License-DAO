@@ -20,6 +20,6 @@ dataSources:
         - name: YourContract
           file: ./abis/localhost_YourContract.json
       eventHandlers:
-        - event: SetPurpose(address,string)
-          handler: handleSetPurpose
+        - event: NewUserProposed(address,string)
+          handler: handleNewUserProposed
       file: ./src/mapping.ts
