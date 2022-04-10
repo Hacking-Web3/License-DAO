@@ -46,6 +46,8 @@ contract LicenseDAO {
   event LicenseRejected(address licenseAddress);
   event VoteSent(address userAddress, address voting, uint8 vote);
 
+  error ProposalIsActive();
+
   modifier memberOnly() {
     require(members[msg.sender] == true, "You need to be a member");
     _;
@@ -104,25 +106,47 @@ contract LicenseDAO {
     emit VoteSent(msg.sender, _proposed, uint8(_vote));
   }
 
-  /// Execute a proposal
-  function executeProposal(address _proposed) external {
+  function isQuorumReached(address _proposed) internal returns (bool) {
     Proposal storage proposal = proposals[_proposed];
 
-    require(
-      (block.timestamp <= proposal.deadline &&
-        (proposal.votesFor + proposal.votesAgainst) > quorum &&
-        (proposal.votesFor * 10000) / (proposal.votesFor + proposal.votesAgainst) > support) || block.timestamp > proposal.deadline,
-      "You cannot execute active proposal"
-    );
-
-    if (proposal.proposalType == ProposalType.MEMBER) {
-      addUser(_proposed);
-    } else {
-      addLicense(_proposed);
+    if (((proposal.votesFor + proposal.votesAgainst) * 10000) / totalMembers > quorum) {
+      return true;
     }
+    return false;
+  }
 
-    proposal.deadline = 0;
-    // delete proposal;
+  function isSupportReached(address _proposed) internal returns (bool) {
+    Proposal storage proposal = proposals[_proposed];
+
+    if ((proposal.votesFor * 10000) / (proposal.votesFor + proposal.votesAgainst) > support) {
+      return true;
+    }
+    return false;
+  }
+
+  function executePassedProposal(address _proposed) internal returns (bool) {
+    Proposal storage proposal = proposals[_proposed];
+    if (isQuorumReached(_proposed) && isSupportReached(_proposed)) {
+      if (proposal.proposalType == ProposalType.MEMBER) {
+        addUser(_proposed);
+      } else {
+        addLicense(_proposed);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  function executeProposal(address _proposed) external returns (bool) {
+    Proposal storage proposal = proposals[_proposed];
+    bool proposalPassed = executePassedProposal(_proposed);
+
+    require(proposal.deadline == 0, "There is no such proposal");
+    if (block.timestamp > proposal.deadline || proposalPassed) {
+      delete proposals[_proposed];
+    } else {
+      revert ProposalIsActive();
+    }
   }
 
   function addUser(address userAddress) internal {
