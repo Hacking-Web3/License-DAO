@@ -55,6 +55,8 @@ const MainPage = lazier(() => import('./MainPage'), 'Main');
  */
 const App: FC = () => {
   console.log('loading app...');
+  // const { isLoading, data } = useQuery(MEMBERS_GQL, {});
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <EthComponentsSettingsContext.Provider value={ethComponentsSettings}>
