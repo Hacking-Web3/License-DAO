@@ -1885,6 +1885,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@scaffold-eth/services@workspace:packages/services":
+  version: 0.0.0-use.local
+  resolution: "@scaffold-eth/services@workspace:packages/services"
+  languageName: unknown
+  linkType: soft
+
 "@scaffold-eth/subgraph@workspace:packages/subgraph":
   version: 0.0.0-use.local
   resolution: "@scaffold-eth/subgraph@workspace:packages/subgraph"
@@ -1902,6 +1908,7 @@ __metadata:
     eslint: ^8.9.0
     husky: ^7.0.4
     lint-staged: ^12.3.4
+    mustache: ^4.2.0
     prettier: ^2.5.1
     prettier-plugin-solidity: ^1.0.0-beta.19
     shx: ^0.3.4
