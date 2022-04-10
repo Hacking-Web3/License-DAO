@@ -44,8 +44,7 @@ contract LicenseDAO {
   event UserRejected(address userAddress);
   event LicenseApproved(address licenseAddress);
   event LicenseRejected(address licenseAddress);
-
-  event VoteSent(address userAddress, address voting, voteType vote);
+  event VoteSent(address userAddress, address voting, uint8 vote);
 
   modifier memberOnly() {
     require(members[msg.sender] == true, "You need to be a member");
@@ -102,7 +101,7 @@ contract LicenseDAO {
       }
     }
     proposal.votes[msg.sender] = _vote;
-    emit VoteSent(msg.sender, _proposed, _vote);
+    emit VoteSent(msg.sender, _proposed, uint8(_vote));
   }
 
   /// Execute a proposal

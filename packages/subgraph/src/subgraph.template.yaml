@@ -24,4 +24,6 @@ dataSources:
           handler: handleNewUserProposed
         - event: UserJoined(address)
           handler: handleUserJoined
+        - event: VoteSent(address,address,uint8)
+          handler: handleVoteSent
       file: ./src/mapping.ts

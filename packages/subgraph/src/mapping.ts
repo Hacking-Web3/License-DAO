@@ -2,9 +2,10 @@ import { BigInt, Address } from "@graphprotocol/graph-ts";
 import {
   LicenseDAO,
   NewUserProposed,
-  UserJoined
+  UserJoined,
+  VoteSent
 } from "../generated/LicenseDAO/LicenseDAO";
-import { MemberProposal, JoinedUser } from "../generated/schema";
+import { MemberProposal, User, Voting } from "../generated/schema";
 
 export function handleNewUserProposed(event: NewUserProposed): void {
   let userAddress = event.params.userAddress.toHexString();
@@ -17,6 +18,7 @@ export function handleNewUserProposed(event: NewUserProposed): void {
     memberProposal.ipfsHash = event.params.ipfsHash;
     memberProposal.createdAt = event.block.timestamp;
     memberProposal.status = "pending";
+    memberProposal.numberVotes = 0;
     /* memberProposal.transactionHash = event.transaction.hash; */
     memberProposal.save();
   }
@@ -25,19 +27,39 @@ export function handleNewUserProposed(event: NewUserProposed): void {
 export function handleUserJoined(event: UserJoined): void {
   let userAddress = event.params.userAddress.toHexString();
 
-  let user = JoinedUser.load(userAddress + "-" + event.transaction.hash.toHex());
+  let user = User.load(userAddress);
 
   if (user == null) {
-    user = new JoinedUser(userAddress + "-" + event.transaction.hash.toHex());
+    user = new User(userAddress);
     user.address = event.params.userAddress;
     user.createdAt = event.block.timestamp;
 
     let proposal = MemberProposal.load(userAddress);
 
     if (proposal != null) {
+      user.memberProposal = proposal.id;
       proposal.status = "accepted";
       proposal.save();
     }
     user.save();
   }
+}
+
+export function handleVoteSent(event: VoteSent): void {
+  let userAddress = event.params.userAddress.toHexString();
+
+  let memberProposal = MemberProposal.load(userAddress);
+  let voting = Voting.load(userAddress);
+
+  if (voting == null) {
+    voting = new Voting(userAddress);
+    voting.address = event.params.userAddress;
+    voting.proposalAddress = event.params.voting;
+    if (memberProposal != null) {
+      memberProposal.numberVotes += 1;
+      memberProposal.save();
+    }
+  }
+  voting.vote = event.params.vote;
+  voting.save();
 }
