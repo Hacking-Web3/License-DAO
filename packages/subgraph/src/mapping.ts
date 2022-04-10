@@ -50,4 +50,16 @@ export function handleVoteSent(event: VoteSent): void {
 
   let memberProposal = MemberProposal.load(userAddress);
   let voting = Voting.load(userAddress);
+
+  if (voting == null) {
+    voting = new Voting(userAddress);
+    voting.address = event.params.userAddress;
+    voting.proposalAddress = event.params.voting;
+    if (memberProposal != null) {
+      memberProposal.numberVotes += 1;
+      memberProposal.save();
+    }
+  }
+  voting.vote = event.params.vote;
+  voting.save();
 }
