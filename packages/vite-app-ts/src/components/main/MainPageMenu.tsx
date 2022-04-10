@@ -32,6 +32,7 @@ export const MainPageMenu: FC<IMainPageMenuProps> = (props) => (
         Hints
       </Link>
     </Menu.Item>
+    {/*
     <Menu.Item key="/exampleui">
       <Link
         onClick={(): void => {
@@ -41,6 +42,7 @@ export const MainPageMenu: FC<IMainPageMenuProps> = (props) => (
         ExampleUI
       </Link>
     </Menu.Item>
+        */}
     <Menu.Item key="/mainnetdai">
       <Link
         onClick={(): void => {

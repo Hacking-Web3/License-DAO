@@ -3,8 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import '~~/styles/main-page.css';
 
-import { GenericContract } from 'eth-components/ant/generic-contract';
-import { useContractReader, useBalance, useEthersAdaptorFromProviderOrSigners, useEventListener } from 'eth-hooks';
+import { useBalance, useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
 import { useEthersContext } from 'eth-hooks/context';
 import { useDexEthPrice } from 'eth-hooks/dapps';
 import { asEthersAdaptor } from 'eth-hooks/functions';
@@ -15,12 +14,13 @@ import { useScaffoldHooksExamples as useScaffoldHooksExamples } from './componen
 import Intro from './components/main/Intro';
 import { ProposalPreview } from './components/main/ProposalPreview';
 import JoinForm from './components/pages/join/JoinForm';
+import Subgraph from './components/pages/subgraph/Subgraph';
 import { APPROVED, PENDING } from './constants';
 
 import { useBurnerFallback } from '~~/components/main/hooks/useBurnerFallback';
 import { useScaffoldProviders as useScaffoldAppProviders } from '~~/components/main/hooks/useScaffoldAppProviders';
-import { Hints, ExampleUI } from '~~/components/pages';
-import { BURNER_FALLBACK_ENABLED, MAINNET_PROVIDER } from '~~/config/appConfig';
+import { Hints } from '~~/components/pages';
+import { BURNER_FALLBACK_ENABLED, MAINNET_PROVIDER, SUBGRAPH_URI } from '~~/config/appConfig';
 import { useAppContracts, useConnectAppContracts, useLoadAppContracts } from '~~/config/contractContext';
 import { NETWORKS } from '~~/models/constants/networks';
 
@@ -76,19 +76,19 @@ export const Main: FC = () => {
   // -----------------------------
 
   // init contracts
-  const yourContract = useAppContracts('YourContract', ethersContext.chainId);
+  // const licenseDAO = useAppContracts('LicenseDAO', ethersContext.chainId);
   const mainnetDai = useAppContracts('DAI', NETWORKS.mainnet.chainId);
 
   // keep track of a variable from the contract in the local React state:
-  const [purpose, update] = useContractReader(
-    yourContract,
-    yourContract?.purpose,
-    [],
-    yourContract?.filters.SetPurpose()
-  );
+  // const [purpose, update] = useContractReader(
+  // yourContract,
+  // yourContract?.purpose,
+  // [],
+  // yourContract?.filters.SetPurpose()
+  // );
 
   // 📟 Listen for broadcast events
-  const [setPurposeEvents] = useEventListener(yourContract, 'SetPurpose', 0);
+  // const [setPurposeEvents] = useEventListener(licenseDAO, 'SetPurpose', 0);
 
   // -----------------------------
   // .... 🎇 End of examples
@@ -125,6 +125,7 @@ export const Main: FC = () => {
                 minQuorum={33}
                 support={70}
                 minSupport={50}
+                proposalAddress={'some address'}
                 status="Approved"></ProposalPreview>
             </div>
             <SectionHeader type={PENDING}>Pending approval</SectionHeader>
@@ -143,6 +144,7 @@ export const Main: FC = () => {
               price={ethPrice}
             />
           </Route>
+          {/*
           <Route path="/exampleui">
             <ExampleUI
               mainnetProvider={scaffoldAppProviders.mainnetAdaptor?.provider}
@@ -160,12 +162,11 @@ export const Main: FC = () => {
               />
             )}
           </Route>
+    /*}
           {/* Subgraph also disabled in MainPageMenu, it does not work, see github issue! */}
-          {/*
           <Route path="/subgraph">
-            <Subgraph subgraphUri={subgraphUri} mainnetProvider={scaffoldAppProviders.mainnetAdaptor?.provider} />
+            <Subgraph subgraphUri={SUBGRAPH_URI} mainnetProvider={scaffoldAppProviders.mainnetAdaptor?.provider} />
           </Route>
-          */}
         </Switch>
       </BrowserRouter>
 

@@ -1,4 +1,8 @@
 import { Form, Button } from 'antd';
+import { transactor } from 'eth-components/functions';
+import { EthComponentsSettingsContext } from 'eth-components/models';
+import { useGasPrice } from 'eth-hooks';
+import { useEthersContext } from 'eth-hooks/context';
 import { FC, useContext } from 'react';
 import { Web3Storage } from 'web3.storage';
 import { CIDString } from 'web3.storage/dist/src/lib/interface';
@@ -6,12 +10,8 @@ import { CIDString } from 'web3.storage/dist/src/lib/interface';
 import CoverLetterForm from './CoverLetterForm';
 
 import SubmitPageHeader from '~~/components/common/SubmitPageHeader';
-import { EthComponentsSettingsContext } from 'eth-components/models';
-import { useGasPrice } from 'eth-hooks';
-import { useEthersContext } from 'eth-hooks/context';
-import { transactor } from 'eth-components/functions';
-import { useAppContracts } from '~~/config/contractContext';
 import { WEB3_STORAGE_TOKEN } from '~~/config/appConfig';
+import { useAppContracts } from '~~/config/contractContext';
 
 const makeFileObjects = (content: string): File[] => {
   const blob = new Blob([content], { type: 'text/plain' });
@@ -54,16 +54,16 @@ const JoinForm: FC<any> = () => {
       const result = tx?.(licenseDAO?.newProposal(address, 0, cid), (update: any) => {
         console.log('📡 Transaction Update:', update);
         if (update && (update.status === 'confirmed' || update.status === 1)) {
-          console.log(' 🍾 Transaction ' + update.hash + ' finished!');
-          console.log(
-            ' ⛽️ ' +
-              update.gasUsed +
-              '/' +
-              (update.gasLimit || update.gas) +
-              ' @ ' +
-              parseFloat(update.gasPrice) / 1000000000 +
-              ' gwei'
-          );
+          // console.log(' 🍾 Transaction ' + update.hash + ' finished!');
+          // console.log(
+          // ' ⛽️ ' +
+          // update.gasUsed +
+          // '/' +
+          // (update.gasLimit || update.gas) +
+          // ' @ ' +
+          // parseFloat(update.gasPrice) / 1000000000 +
+          // ' gwei'
+          // );
         }
       });
       console.log('awaiting metamask/web3 confirm result...', result);
