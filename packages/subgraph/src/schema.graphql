@@ -6,6 +6,8 @@ type MemberProposal @entity {
   transactionHash: String!
   status: String!
   numberVotes: Int!
+  votesFor: Int!
+  votesAgainst: Int!
   user: User! @derivedFrom(field: "memberProposal")
 }
 

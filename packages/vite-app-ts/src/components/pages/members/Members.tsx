@@ -10,7 +10,7 @@ const Members: FC<any> = () => {
         address
         ipfsHash
       }
-      joinedUsers(orderBy: createdAt, orderDirection: asc) {
+      users(orderBy: createdAt, orderDirection: asc) {
         address
       }
     }
@@ -35,7 +35,7 @@ const Members: FC<any> = () => {
             type="member"
             status="pending"></ProposalPreview>
         ))}
-        {data.joinedUsers.map((proposal: any) => (
+        {data.users.map((proposal: any) => (
           <ProposalPreview
             proposalAddress={proposal.address}
             streamId={proposal.ipfsHash}

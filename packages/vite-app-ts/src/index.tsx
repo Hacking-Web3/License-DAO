@@ -23,7 +23,7 @@ const run = async (): Promise<void> => {
 
   const App = lazy(() => import('./App'));
 
-  const subgraphUri = 'http://localhost:8000/subgraphs/name/scaffold-eth/your-contract';
+  const subgraphUri = 'https://api.thegraph.com/subgraphs/name/0x00duke/license-dao';
 
   const client = new ApolloClient({
     uri: subgraphUri,

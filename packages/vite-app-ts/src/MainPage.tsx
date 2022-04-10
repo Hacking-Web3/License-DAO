@@ -84,6 +84,7 @@ export const Main: FC = () => {
   // keep track of a variable from the contract in the local React state:
   const [quorum, updateQuorum] = useContractReader(licenseDAO, licenseDAO?.quorum, []);
   const [support, updateSupport] = useContractReader(licenseDAO, licenseDAO?.support, []);
+  const [totalMembers, updateTotalMembers] = useContractReader(licenseDAO, licenseDAO?.totalMembers, []);
 
   // 📟 Listen for broadcast events
   // const [setPurposeEvents] = useEventListener(licenseDAO, 'SetPurpose', 0);
@@ -137,7 +138,11 @@ export const Main: FC = () => {
             <Members />
           </Route>
           <Route path="/proposals/u/:address">
-            <Submission minQuorum={quorum?.div(100).toNumber() || 0} minSupport={support?.div(100).toNumber() || 0} />
+            <Submission
+              minQuorum={quorum?.div(100).toNumber() || 0}
+              minSupport={support?.div(100).toNumber() || 0}
+              totalMembers={totalMembers?.toNumber() || 0}
+            />
           </Route>
           {/* you can add routes here like the below examlples */}
           <Route path="/hints">

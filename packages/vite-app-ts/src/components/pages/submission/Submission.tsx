@@ -19,6 +19,7 @@ interface SearchParams {
 interface ISubmission {
   minSupport: number;
   minQuorum: number;
+  totalMembers: number;
 }
 
 const Submission: FC<ISubmission> = (props) => {
@@ -35,7 +36,10 @@ const Submission: FC<ISubmission> = (props) => {
     {
       memberProposal(id: "${address}") {
         ipfsHash,
-        createdAt
+        createdAt,
+        votesFor,
+        votesAgainst,
+        numberVotes
       }
     }
   `;
@@ -103,15 +107,15 @@ const Submission: FC<ISubmission> = (props) => {
         by <Address address={address}></Address>
       </div>
       <span className="submission-dates">
-        <strong>Start date:</strong> {startDate.toLocaleDateString(undefined, options)} | <strong>End date:</strong>
+        <strong>Start date:</strong> {startDate.toLocaleDateString()} | <strong>End date:</strong>
       </span>
-      {endDate.toLocaleDateString(undefined, options)}
+      {endDate.toLocaleDateString()}
       <div className="submission-stats">
         <ProposalStatus status="pending">Pending approval</ProposalStatus>
         <div>
           <div className="proposal-preview-stats-title">Quorum</div>
           <Progress
-            percent={0}
+            percent={(data.memberProposal.numberVotes / props.totalMembers) * 100}
             success={{ percent: props.minQuorum, strokeColor: 'transparent' }}
             showInfo={false}
             strokeColor="#D7C9C3"
@@ -119,12 +123,14 @@ const Submission: FC<ISubmission> = (props) => {
             strokeWidth={13}
             className="proposal-preview-quorum"
           />
-          {0}%
+          {(data.memberProposal.numberVotes / props.totalMembers) * 100}%
         </div>
         <div>
           <div className="proposal-preview-stats-title">Support</div>
           <Progress
-            percent={0}
+            percent={
+              (data.memberProposal.votesFor / (data.memberProposal.votesFor + data.memberProposal.votesAgainst)) * 100
+            }
             success={{ percent: props.minSupport, strokeColor: 'transparent' }}
             showInfo={false}
             strokeColor="#C6E5E3"
@@ -132,12 +138,21 @@ const Submission: FC<ISubmission> = (props) => {
             strokeWidth={13}
           />
           <div className="proposal-preview-vote-res">
-            <span>YES{0}%</span>
-            <span>NO {100}%</span>
+            <span>
+              YES{' '}
+              {(data.memberProposal.votesFor / (data.memberProposal.votesFor + data.memberProposal.votesAgainst)) * 100}
+              %
+            </span>
+            <span>
+              NO{' '}
+              {(data.memberProposal.votesAgainst / (data.memberProposal.votesFor + data.memberProposal.votesAgainst)) *
+                100}
+              %
+            </span>
           </div>
         </div>
         <div>
-          Voted: 1000 <UserOutlined />
+          Voted: ${data.memberProposal.numberVotes} <UserOutlined />
         </div>
       </div>
       <div className="submission-content">{content}</div>
