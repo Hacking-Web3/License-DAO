@@ -12,6 +12,7 @@ interface ImportMetaEnv {
   readonly VITE_FAUCET_ALLOWED: string;
   readonly VITE_BURNER_FALLBACK_ALLOWED: string;
   readonly VITE_CONNECT_TO_BURNER_AUTOMATICALLY: string;
+  readonly VITE_WEB3_STORAGE_TOKEN: string;
 }
 
 interface ImportMeta {
