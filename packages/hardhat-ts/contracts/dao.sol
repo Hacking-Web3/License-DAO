@@ -51,8 +51,8 @@ contract LicenseDAO {
   }
 
   constructor(uint256 _quorum, uint256 _support) {
-    totalMembers = 0;
     members[msg.sender] = true;
+    totalMembers = 1;
     quorum = _quorum; // 3000 for 30%
     support = _support; // 5000 for 50%
   }
@@ -61,13 +61,14 @@ contract LicenseDAO {
     address _proposed,
     ProposalType _proposalType,
     string calldata _document
-  ) external memberOnly {
+  ) external {
     Proposal storage proposal = proposals[_proposed];
 
     if (_proposalType == ProposalType.MEMBER) {
       require(proposal.deadline != 0 || members[_proposed] == false, "User is in the dao or already proposed");
       emit NewUserProposed(_proposed, _document);
     } else if (_proposalType == ProposalType.LICENSE) {
+      require(members[msg.sender] == true, "You need to be a member");
       require(proposal.deadline != 0 || licenses[_proposed] == false, "License is approved or already proposed");
       emit NewLicenseProposed(_proposed, _document);
     }

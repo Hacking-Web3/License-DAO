@@ -39,6 +39,8 @@ export const BURNER_FALLBACK_ENABLED = import.meta.env.VITE_BURNER_FALLBACK_ALLO
 export const CONNECT_TO_BURNER_AUTOMATICALLY =
   import.meta.env.VITE_CONNECT_TO_BURNER_AUTOMATICALLY === 'true' && import.meta.env.DEV;
 
+export const WEB3_STORAGE_TOKEN = import.meta.env.VITE_WEB3_STORAGE_TOKEN;
+
 if (DEBUG)
   invariant.log(
     `import.meta.env.DEV: ${import.meta.env.DEV}`,
