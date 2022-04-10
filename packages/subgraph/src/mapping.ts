@@ -2,9 +2,10 @@ import { BigInt, Address } from "@graphprotocol/graph-ts";
 import {
   LicenseDAO,
   NewUserProposed,
-  UserJoined
+  UserJoined,
+  VoteSent
 } from "../generated/LicenseDAO/LicenseDAO";
-import { MemberProposal, JoinedUser } from "../generated/schema";
+import { MemberProposal, JoinedUser, Voting } from "../generated/schema";
 
 export function handleNewUserProposed(event: NewUserProposed): void {
   let userAddress = event.params.userAddress.toHexString();
@@ -40,4 +41,11 @@ export function handleUserJoined(event: UserJoined): void {
     }
     user.save();
   }
+}
+
+export function handleVoteSent(event: VoteSent): void {
+  let userAddress = event.params.userAddress.toHexString();
+
+  let memberProposal = MemberProposal.load(userAddress);
+  let voting = Voting.load(userAddress);
 }
