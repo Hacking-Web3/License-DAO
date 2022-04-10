@@ -60,7 +60,7 @@ contract LicenseDAO {
   function newProposal(
     address _proposed,
     ProposalType _proposalType,
-    string _document
+    string calldata _document
   ) external memberOnly {
     Proposal storage proposal = proposals[_proposed];
 
@@ -72,30 +72,29 @@ contract LicenseDAO {
       emit NewLicenseProposed(_proposed, _document);
     }
 
-    proposals.proposed = _proposed;
-    proposals.deadline = now + proposalDuration;
-    proposals.proposalType = _proposalType;
+    proposal.deadline = block.timestamp + proposalDuration;
+    proposal.proposalType = _proposalType;
   }
 
   /// Vote yes/no on a given proposal
   function voteOnProposal(address _proposed, voteType _vote) external memberOnly {
-    Proposal storage proposal = proposals[_proposalId];
-    voteType prevUserVote = proposal.votes[_proposed][msg.sender];
+    Proposal storage proposal = proposals[_proposed];
+    voteType prevUserVote = proposal.votes[msg.sender];
     require(_vote != voteType.NONE, "You cannot take back your vote");
     require(_vote != prevUserVote, "You cannot cast same vote");
     require(proposal.deadline > block.timestamp, "Inactive or not existing proposal");
 
     if (_vote == voteType.AGAINST) {
-      proposal.voteAgainst += 1;
+      proposal.votesAgainst += 1;
     } else {
-      proposal.voteFor += 1;
+      proposal.votesFor += 1;
     }
 
-    if (proposal.votes[_proposed][msg.sender] != voteType.NONE) {
+    if (proposal.votes[msg.sender] != voteType.NONE) {
       if (_vote == voteType.AGAINST) {
-        proposal.voteAgainst -= 1;
+        proposal.votesAgainst -= 1;
       } else {
-        proposal.voteFor -= 1;
+        proposal.votesFor -= 1;
       }
     }
   }
@@ -106,8 +105,8 @@ contract LicenseDAO {
 
     require(
       (block.timestamp <= proposal.deadline &&
-        (proposal.votesFor + proposal.voteAgainst) > quorum &&
-        (proposal.voteFor * 10000) / (proposal.votesFor + proposal.votesAgainst) > support) || block.timestamp > proposal.deadline,
+        (proposal.votesFor + proposal.votesAgainst) > quorum &&
+        (proposal.votesFor * 10000) / (proposal.votesFor + proposal.votesAgainst) > support) || block.timestamp > proposal.deadline,
       "You cannot execute active proposal"
     );
 
@@ -117,7 +116,8 @@ contract LicenseDAO {
       addLicense(_proposed);
     }
 
-    delete proposal;
+    proposal.deadline = 0;
+    // delete proposal;
   }
 
   function addUser(address userAddress) internal {
