@@ -1,6 +1,6 @@
 type MemberProposal @entity {
   id: ID!
-  address: Address!
+  address: Bytes!
   ipfsHash: String!
   createdAt: BigInt!
   transactionHash: String!
