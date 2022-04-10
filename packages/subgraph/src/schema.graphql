@@ -5,10 +5,13 @@ type MemberProposal @entity {
   createdAt: BigInt!
   transactionHash: String!
   status: String!
+  numberVotes: Int!
+  user: User! @derivedFrom(field: "memberProposal")
 }
 
-type JoinedUser @entity {
+type User @entity {
   id: ID!
   address: Bytes!
   createdAt: BigInt!
+  memberProposal: MemberProposal!
 }
